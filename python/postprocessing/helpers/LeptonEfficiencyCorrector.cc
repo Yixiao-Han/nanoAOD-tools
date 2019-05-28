@@ -38,6 +38,7 @@ LeptonEfficiencyCorrector:: LeptonEfficiencyCorrector(std::vector<std::string> f
   }
 
   for(int i=0; i<(int)files.size();++i) {
+    std::cout << " --> opening this file : " << files[i].c_str() << std::endl;
     TFile *f = TFile::Open(files[i].c_str(),"read");
     if(!f) {
       std::cout << "WARNING! File " << files[i] << " cannot be opened. Skipping this scale factor " << std::endl;
@@ -51,9 +52,13 @@ LeptonEfficiencyCorrector:: LeptonEfficiencyCorrector(std::vector<std::string> f
     } else {
       std::cout << "Loading histogram " << histos[i] << " from file " << files[i] << "... " << std::endl;
     }
+    std::cout << "---- doing a push_back" << std::endl;
     effmaps_.push_back(hist);
+    std::cout << "---- closing the file" << std::endl;
     f->Close();
+    std::cout << "---- file closed" << std::endl;
   }
+  std::cout << "---- the end of the init function " << std::endl;
 }
 
 void LeptonEfficiencyCorrector::setLeptons(int nLep, int *lepPdgId, float *lepPt, float *lepEta) {

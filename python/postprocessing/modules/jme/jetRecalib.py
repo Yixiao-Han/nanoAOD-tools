@@ -13,7 +13,7 @@ class jetRecalib(Module):
 
         self.redoJEC = redoJEC
 
-        if "AK4" in jetType : 
+        if "AK4" in jetType :
             self.jetBranchName = "Jet"
         elif "AK8" in jetType :
             self.jetBranchName = "FatJet"
@@ -21,7 +21,7 @@ class jetRecalib(Module):
         else:
             raise ValueError("ERROR: Invalid jet type = '%s'!" % jetType)
         self.rhoBranchName = "fixedGridRhoFastjetAll"
-        self.lenVar = "n" + self.jetBranchName        
+        self.lenVar = "n" + self.jetBranchName
 
         self.jesInputArchivePath = os.environ['CMSSW_BASE'] + "/src/PhysicsTools/NanoAODTools/data/jme/"
         # Text files are now tarred so must extract first into temporary directory (gets deleted during python memory management at script exit)
@@ -30,7 +30,7 @@ class jetRecalib(Module):
         self.jesArchive.extractall(self.jesInputFilePath)
 
         self.jetReCalibrator = JetReCalibrator(globalTag, jetType , True, self.jesInputFilePath, calculateSeparateCorrections = False, calculateType1METCorrection  = False)
-	
+
         # load libraries for accessing JES scale factors and uncertainties from txt files
         for library in [ "libCondFormatsJetMETObjects", "libPhysicsToolsNanoAODTools" ]:
             if library not in ROOT.gSystem.GetLibraries():
@@ -55,11 +55,11 @@ class jetRecalib(Module):
                         
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
-    
+
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
         jets = Collection(event, self.jetBranchName )
-        met = Object(event, "MET") 
+        met = Object(event, "MET")
 
         jets_pt_raw = []
         jets_pt_nom = []
@@ -70,7 +70,7 @@ class jetRecalib(Module):
         ( met_px_nom, met_py_nom ) = ( met_px, met_py )
         met_px_nom = met_px
         met_py_nom = met_py
-                
+
         rho = getattr(event, self.rhoBranchName)
         
         for jet in jets:            
@@ -128,7 +128,8 @@ jetRecalib2016GHAK8Puppi = lambda : jetRecalib("Summer16_07Aug2017GH_V11_DATA","
 
 jetRecalib2017B = lambda : jetRecalib("Fall17_17Nov2017B_V32_DATA","Fall17_17Nov2017_V32_DATA")
 jetRecalib2017C = lambda : jetRecalib("Fall17_17Nov2017C_V32_DATA","Fall17_17Nov2017_V32_DATA")
-jetRecalib2017DE = lambda : jetRecalib("Fall17_17Nov2017DE_V32_DATA","Fall17_17Nov2017_V32_DATA")
+jetRecalib2017D = lambda : jetRecalib("Fall17_17Nov2017DE_V32_DATA","Fall17_17Nov2017_V32_DATA")
+jetRecalib2017E = lambda : jetRecalib("Fall17_17Nov2017DE_V32_DATA","Fall17_17Nov2017_V32_DATA")
 jetRecalib2017F = lambda : jetRecalib("Fall17_17Nov2017F_V32_DATA","Fall17_17Nov2017_V32_DATA")
 
 jetRecalib2017BAK8Puppi = lambda : jetRecalib("Fall17_17Nov2017B_V32_DATA","Fall17_17Nov2017_V32_DATA",jetType="AK8PFPuppi")

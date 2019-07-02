@@ -167,7 +167,9 @@ class jetSmearer(Module):
         #--------------------------------------------------------------------------------------------
 
         jet_m_sf_and_uncertainty = dict( zip( [enum_nominal, enum_shift_up, enum_shift_down], self.jmr_vals ) )
-
+        # Get Mass resolution 
+        jet_m_resolution = 1.0
+        # print "We are using this shit ??? "
         # generate random number with flat distribution between 0 and 1
         u = self.rnd.Rndm()
 

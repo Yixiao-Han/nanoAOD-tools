@@ -3,7 +3,7 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 
-def InputTree(tree, entrylist=None):
+def InputTree(tree, entrylist=ROOT.MakeNullPointer(ROOT.TEntryList)):
     """add to the PyROOT wrapper of a TTree a TTreeReader and methods readBranch, arrayReader, valueReader"""
     if hasattr(tree, '_ttreereader'):
         return tree  # don't initialize twice
@@ -30,6 +30,8 @@ def getArrayReader(tree, branchName):
     if branchName not in tree._ttras:
         if not tree.GetBranch(branchName):
             raise RuntimeError("Can't find branch '%s'" % branchName)
+        if not tree.GetBranchStatus(branchName):
+            raise RuntimeError("Branch %s has status=0" % branchName)
         leaf = tree.GetBranch(branchName).GetLeaf(branchName)
         if not bool(leaf.GetLeafCount()):
             raise RuntimeError("Branch %s is not a variable-length value array" % branchName)
@@ -43,6 +45,8 @@ def getValueReader(tree, branchName):
     if branchName not in tree._ttrvs:
         if not tree.GetBranch(branchName):
             raise RuntimeError("Can't find branch '%s'" % branchName)
+        if not tree.GetBranchStatus(branchName):
+            raise RuntimeError("Branch %s has status=0" % branchName)
         leaf = tree.GetBranch(branchName).GetLeaf(branchName)
         if bool(leaf.GetLeafCount()) or leaf.GetLen() != 1:
             raise RuntimeError("Branch %s is not a value" % branchName)
@@ -74,6 +78,8 @@ def readBranch(tree, branchName):
         branch = tree.GetBranch(branchName)
         if not branch:
             raise RuntimeError("Unknown branch %s" % branchName)
+#        if not tree.GetBranchStatus(branchName):
+#            raise RuntimeError("Branch %s has status=0" % branchName)
         leaf = branch.GetLeaf(branchName)
         typ = leaf.GetTypeName()
         if leaf.GetLen() == 1 and not bool(leaf.GetLeafCount()):
@@ -110,7 +116,7 @@ def _makeValueReader(tree, typ, nam):
 
 
 def _remakeAllReaders(tree):
-    _ttreereader = ROOT.TTreeReader(tree, getattr(tree, '_entrylist', None))
+    _ttreereader = ROOT.TTreeReader(tree, getattr(tree, '_entrylist', ROOT.MakeNullPointer(ROOT.TEntryList)))
     _ttreereader._isClean = True
     _ttrvs = {}
     for k in tree._ttrvs.keys():

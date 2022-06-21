@@ -51,6 +51,10 @@ class lepSFProducer(Module):
             el_f = ["2016_El_EGM2D_eleGSF.root",
                     "2016_El_EGM2D_eleMVA90.root"]
             el_h = ["EGamma_SF2D", "EGamma_SF2D"]
+        if electronSelectionTag=="GPMVA90_2016_APV":
+            el_f = ["2016_El_EGM2D_eleGSF.root",
+                    "2016_El_EGM2D_eleMVA90.root"]
+            el_h = ["EGamma_SF2D", "EGamma_SF2D"]
         elif electronSelectionTag=="GPMVA90_2017":
             el_f = ["egammaEffi.txt_EGM2D_MVA90iso_UL17.root",
                     #"egammaEffi_ptAbove20.txt_EGM2D_UL2017.root",

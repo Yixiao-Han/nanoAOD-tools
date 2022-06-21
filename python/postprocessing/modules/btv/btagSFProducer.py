@@ -84,6 +84,16 @@ class btagSFProducer(Module):
                     },
                     'supported_wp': ["L", "M", "T", "shape_corr"]
                 },
+                'UL2016': {
+                    'inputFileName': "wp_deepCSV_106XUL16preVFP_v2.csv",
+#                    'inputFileName': "DeepCSV_106XUL16preVFPSF_v1.csv",
+                    'measurement_types': {
+                        0: "comb",  # b
+                        1: "comb",  # c
+                        2: "incl"   # light
+                    },
+                    'supported_wp': ["L", "M", "T", "shape_corr"]
+                },
                 '2017': {
                     'inputFileName': "DeepCSV_94XSF_V4_B_F.csv",
                     'measurement_types': {
@@ -124,6 +134,16 @@ class btagSFProducer(Module):
             'deepjet': {
                 'Legacy2016': {
                     'inputFileName': "DeepJet_2016LegacySF_V1.csv",
+                    'measurement_types': {
+                        0: "comb",  # b
+                        1: "comb",  # c
+                        2: "incl"   # light
+                    },
+                    'supported_wp': ["L", "M", "T", "shape_corr"]
+                },
+                'UL2016': {
+                    'inputFileName': "wp_deepJet_106XUL16preVFP_v2.csv",
+#                    'inputFileName': "DeepJet_106XUL16preVFPSF_v1.csv",
                     'measurement_types': {
                         0: "comb",  # b
                         1: "comb",  # c
@@ -245,6 +265,9 @@ class btagSFProducer(Module):
     def beginJob(self):
         # initialize BTagCalibrationReader
         # (cf. https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagCalibration )
+        print(type(self.algo),self.algo)
+        print(type(os.path.join(self.inputFilePath, self.inputFileName)))
+        print(os.path.join(self.inputFilePath, self.inputFileName))
         self.calibration = ROOT.BTagCalibration(
             self.algo, os.path.join(self.inputFilePath, self.inputFileName))
         self.readers = {}
